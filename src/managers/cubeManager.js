@@ -22,7 +22,15 @@ exports.getAll = (search, from, to) => {
     if(search) {
        result = result.filter(cube => cube.name.toLowerCase().includes(search.toLowerCase()));
     }
-    console.log(result);
+
+    if(from) {
+        result = result.filter(cube => Number(cube.difficultyLevel) >= Number(from));
+    }
+
+    if(to) {
+        result = result.filter(cube => Number(cube.difficultyLevel) <= Number(to));
+
+    }
     return result;
 };
 
