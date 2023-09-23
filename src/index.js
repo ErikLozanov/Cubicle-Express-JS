@@ -1,6 +1,6 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
-const path = require('path');
+const expressConfig = require('./config/expressConfig');
 
 const app = express();
 
@@ -16,6 +16,8 @@ app.engine('hbs', handlebars.engine({
 }));
 app.set('view engine', 'hbs');
 app.set('views', 'src/views');
+handlebarsConfig(app);
+
 // Routes
 app.get('/', (req, res) => {
     res.render('index');
