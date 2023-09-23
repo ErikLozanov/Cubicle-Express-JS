@@ -16,7 +16,15 @@ const cubes = [
     }
 ];
 
-exports.getAll = () => cubes.slice();
+exports.getAll = (search, from, to) => {
+    let result = cubes.slice();
+
+    if(search) {
+       result = result.filter(cube => cube.name.toLowerCase().includes(search.toLowerCase()));
+    }
+    console.log(result);
+    return result;
+};
 
 exports.getOne = (cubeId) => cubes.find(x => x.id == cubeId);
 

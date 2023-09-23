@@ -1,8 +1,13 @@
 const router = require('express').Router();
 const cubeManager = require('../managers/cubeManager');
+// req.params - parameters
+// req.query - everything after ?
+// req.body - post danni
 
 router.get('/', (req, res) => {
-    const cubes = cubeManager.getAll();
+    const {search, from, to} = req.query;
+
+    const cubes = cubeManager.getAll(search, from, to);
     res.render('index', {cubes});
 });
 
