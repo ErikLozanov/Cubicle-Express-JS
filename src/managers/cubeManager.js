@@ -11,3 +11,5 @@ exports.create = (cubeData) => {
 
     return newCube;
 }
+
+exports.getAll = () => cubes.slice();
