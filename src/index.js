@@ -2,6 +2,7 @@ const express = require("express");
 
 const expressConfig = require("./config/expressConfig");
 const handlebarsConfig = require("./config/handlebarsConfig");
+const dbConnect = require('./config/dbConfig');
 const routes = require('./routes');
 
 const app = express();
@@ -13,6 +14,10 @@ expressConfig(app);
 
 // Handlebars config
 handlebarsConfig(app);
+
+dbConnect()
+.then(() => console.log('DB connected successfully!'))
+.catch(err => console.log('DB error:', err));
 
 // Routes
 app.use(routes);
