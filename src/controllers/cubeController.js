@@ -35,7 +35,9 @@ router.get('/:cubeId/attach-accessory',async (req,res) => {
 
     const hasAccessories = accessories.length > 0;
 
-    res.render('accessory/attach', {cube , accessories, hasAccessories });
+    res.render('accessory/attach', {cube ,
+         accessories,
+          hasAccessories });
 });
 
 router.post('/:cubeId/attach-accessory', async (req,res) => {
