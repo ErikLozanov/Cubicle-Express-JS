@@ -28,11 +28,14 @@ router.get("/:cubeId/details", async (req, res) => {
     const cube = await cubeManager
         .getOneWithAccessories(req.params.cubeId)
         .lean();
-    console.log(cube);
-    if (!cube) {
+
+        if (!cube) {
         return res.redirect("/404");
     }
-    res.render("cube/details", { cube });
+
+    const isOwner = cube.owner?.toString() === req.user._id;
+
+    res.render("cube/details", { cube, isOwner });
 });
 
 router.get("/:cubeId/attach-accessory", async (req, res) => {
