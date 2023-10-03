@@ -4,6 +4,21 @@ const cubeManager = require("../managers/cubeManager");
 const accessoryManager = require("../managers/accessoryManager");
 const {getDifficultyOptionsViewData} = require('../utils/viewHelpers');
 
+router.get("/:cubeId/details", async (req, res) => {
+    const cube = await cubeManager
+        .getOneWithAccessories(req.params.cubeId)
+        .lean();
+
+        if (!cube) {
+        return res.redirect("/404");
+    }
+
+    const isOwner = cube.owner?.toString() === req.user._id;
+
+    res.render("cube/details", { cube, isOwner });
+});
+
+router.use(isAuth);
 
 router.get("/create", isAuth, (req, res) => {
     console.log(req.user);
@@ -24,19 +39,6 @@ router.post("/create", async (req, res) => {
     res.redirect("/");
 });
 
-router.get("/:cubeId/details", async (req, res) => {
-    const cube = await cubeManager
-        .getOneWithAccessories(req.params.cubeId)
-        .lean();
-
-        if (!cube) {
-        return res.redirect("/404");
-    }
-
-    const isOwner = cube.owner?.toString() === req.user._id;
-
-    res.render("cube/details", { cube, isOwner });
-});
 
 router.get("/:cubeId/attach-accessory", async (req, res) => {
     const cube = await cubeManager.getOne(req.params.cubeId).lean();
