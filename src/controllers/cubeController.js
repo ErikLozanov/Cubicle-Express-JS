@@ -78,7 +78,9 @@ router.get("/:cubeId/edit",isAuth, async (req, res) => {
     const cube = await cubeManager.getOne(req.params.cubeId).lean();
 
     const options = getDifficultyOptionsViewData(cube.difficultyLevel);
-
+    if(cube.owner.toString() !== req.user._id) {
+        return res.redirect('/404');
+    }
     res.render("cube/edit", { cube, options });
 });
 
