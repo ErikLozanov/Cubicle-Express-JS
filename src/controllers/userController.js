@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 
 const userManager = require('../managers/userManager');
-
+const {extractErrorMessages} = require('../utils/errorHelpers');
 router.get('/register', (req,res) => {
     res.render('users/register');
 });
@@ -14,8 +14,8 @@ router.post('/register',async (req,res) => {
         
         res.redirect('/users/login');
     } catch (err) {
-        const firstErrorMessage = Object.values(err.errors).message;
-        res.status(404).render('users/register', {errorMessage: firstErrorMessage});
+        const errorMessages = extractErrorMessages(err);
+        res.status(404).render('users/register', {errorMessages: errorMessages});
     }
 
 })
@@ -24,14 +24,20 @@ router.get('/login', (req, res) => {
     res.render('users/login');
 });
 
-router.post('/login',async (req, res) => {
+router.post('/login',async (req, res, next) => {
     const {username, password} = req.body;
 
-    const token = await userManager.login(username,password);
+    try {
+        const token = await userManager.login(username,password);
     
-    res.cookie('auth', token, {httpOnly: true });
+        res.cookie('auth', token, {httpOnly: true });
+    
+        res.redirect('/');
+    } catch (error) {
+        next(error);
+    }
 
-    res.redirect('/');
+
 });
 
 router.get('/logout', (req, res) => {
